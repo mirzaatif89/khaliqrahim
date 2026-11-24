@@ -8,6 +8,7 @@ import { useCart } from "@/lib/cart";
 import { contentQuery } from "@/lib/queries";
 import { cn } from "@/lib/utils";
 import { Logo } from "./Logo";
+import { AdminLoginDialog } from "./AdminLoginDialog";
 
 export const NAV = [
   { to: "/", label: "Home" },
@@ -24,6 +25,7 @@ export function Header() {
   const { count, setOpen } = useCart();
   const [scrolled, setScrolled] = useState(false);
   const [mobile, setMobile] = useState(false);
+  const [loginOpen, setLoginOpen] = useState(false);
   const path = useRouterState({ select: (s) => s.location.pathname });
 
   useEffect(() => {
@@ -105,8 +107,8 @@ export function Header() {
                 )}
               </AnimatePresence>
             </button>
-            <Button asChild variant="outlinePill" className="hidden h-11 px-4 lg:inline-flex">
-              <Link to="/admin"><LogIn /> Login</Link>
+            <Button variant="outlinePill" className="hidden h-11 px-4 lg:inline-flex" onClick={() => setLoginOpen(true)}>
+              <LogIn /> Login
             </Button>
             <Button asChild variant="hero" className="hidden h-11 px-5 sm:inline-flex lg:hidden xl:inline-flex">
               <Link to="/appointment">
@@ -144,8 +146,8 @@ export function Header() {
                     </Link>
                   </motion.div>
                 ))}
-                <Button asChild variant="outlinePill" size="xl" className="mt-3">
-                  <Link to="/admin"><LogIn /> Login</Link>
+                <Button variant="outlinePill" size="xl" className="mt-3" onClick={() => { setMobile(false); setLoginOpen(true); }}>
+                  <LogIn /> Login
                 </Button>
                 <Button asChild variant="hero" size="xl" className="mt-3">
                   <Link to="/appointment">
@@ -157,6 +159,7 @@ export function Header() {
           )}
         </AnimatePresence>
       </header>
+      <AdminLoginDialog open={loginOpen} onOpenChange={setLoginOpen} />
     </>
   );
 }
