@@ -1,0 +1,3 @@
+UPDATE public.site_content SET value = value || '{"delivery_fee":0,"free_delivery_over":0,"delivery_time":"Ready for pickup at the clinic, usually the same day"}'::jsonb WHERE key='store';
+UPDATE public.site_content SET value = value || '{"announcement":"Order medicines online · Pick up & pay at the clinic · WhatsApp 0333-0501084"}'::jsonb WHERE key='home';
+UPDATE public.site_content SET value = jsonb_set(value, '{mission}', '"To make safe, gentle and individualized homeopathic care easy to reach — in our clinic and online."') WHERE key='about';
