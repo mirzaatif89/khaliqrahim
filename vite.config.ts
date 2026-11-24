@@ -16,8 +16,9 @@ export default defineConfig({
     // serving it. Keep local browser dependencies in their own cache directory.
     ...(process.env['LOCAL_RUNTIME'] === "true" ? { cacheDir: "node_modules/.vite-local-runtime" } : {}),
     plugins: process.env['LOCAL_RUNTIME'] === "true" ? [localRuntimePlugin()] : [],
-    define: { "import.meta.env.VITE_LOCAL_RUNTIME": JSON.stringify(process.env['LOCAL_RUNTIME'] === "true" ? "true" : "false") },
+    define: { "import.meta.env.VITE_LOCAL_RUNTIME": JSON.stringify(process.env['LOCAL_RUNTIME'] === "true" || process.env['MYSQL_RUNTIME'] === "true" ? "true" : "false") },
   },
+  ...(process.env['MYSQL_RUNTIME'] === "true" ? { nitro: { preset: "node-middleware", output: { dir: ".output-hosting", serverDir: ".output-hosting/server", publicDir: ".output-hosting/public" } } } : {}),
   tanstackStart: {
     // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
     // nitro/vite builds from this

@@ -12,7 +12,11 @@
     "format": "prettier --write .",
     "test": "vitest run",
     "test:watch": "vitest",
-    "start": "node scripts/start.mjs"
+    "start": "node scripts/start.mjs",
+    "build:hosting": "node scripts/build-hosting.mjs",
+    "start:hosting": "node app.cjs",
+    "db:setup": "node scripts/setup-hosting-db.mjs",
+    "package:hosting": "node scripts/package-hosting.mjs"
   },
   "overrides": {
     "rolldown": "1.2.1",
@@ -102,5 +106,8 @@
     "typescript-eslint": "^8.73.0",
     "vite": "8.1.7",
     "vitest": "^4.1.12"
+  },
+  "engines": {
+    "node": ">=22.12.0"
   }
 }

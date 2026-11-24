@@ -129,7 +129,12 @@ export function localRuntimePlugin() {
   return {
     name: 'local-mysql-runtime',
     configureServer(server) {
-      server.middlewares.use(async (req, res, next) => {
+      server.middlewares.use(localMiddleware);
+    },
+  };
+}
+
+export async function localMiddleware(req, res, next) {
         if (req.url?.startsWith('/api/public/media/')) {
           try {
             const path = decodeURIComponent(req.url.split('?')[0].slice('/api/public/media/'.length));
@@ -144,7 +149,9 @@ export function localRuntimePlugin() {
         res.setHeader('Content-Type', 'application/json'); res.setHeader('Cache-Control', 'no-store');
         try {
           if (req.method !== 'POST' || !req.headers['content-type']?.startsWith('application/json')) throw new Error('JSON POST required');
-          if (req.headers.origin && req.headers.origin !== `http://${req.headers.host}`) throw new Error('Invalid origin');
+          const origin = process.env.APP_URL ? new URL(process.env.APP_URL).origin : `http://${req.headers.host}`;
+          if (req.headers.origin && req.headers.origin !== origin) throw new Error('Invalid origin');
+          const secureCookie = origin.startsWith('https:') ? '; Secure' : '';
           let body = ''; for await (const chunk of req) { body += chunk; if (body.length > 8 * 1024 * 1024) throw new Error('Request too large'); }
           const p = JSON.parse(body);
           const token = req.headers.cookie?.match(/(?:^|; )kr_session=([a-f0-9]+)/)?.[1];
@@ -160,8 +167,8 @@ export function localRuntimePlugin() {
             for (const [key, expiry] of sessions) if (expiry < now) sessions.delete(key);
             if (token) sessions.delete(token);
             const id = randomBytes(32).toString('hex'); sessions.set(id, now + 8 * 3600000);
-            res.setHeader('Set-Cookie', `kr_session=${id}; HttpOnly; SameSite=Strict; Path=/; Max-Age=28800`); data = { user };
-          } else if (p.action === 'logout') { sessions.delete(token); res.setHeader('Set-Cookie', 'kr_session=; HttpOnly; SameSite=Strict; Path=/; Max-Age=0'); }
+            res.setHeader('Set-Cookie', `kr_session=${id}; HttpOnly; SameSite=Strict; Path=/; Max-Age=28800${secureCookie}`); data = { user };
+          } else if (p.action === 'logout') { sessions.delete(token); res.setHeader('Set-Cookie', `kr_session=; HttpOnly; SameSite=Strict; Path=/; Max-Age=0${secureCookie}`); }
           else if (p.action === 'session') data = admin ? { user } : null;
           else if (p.action === 'query') { if (!admin) throw new Error('Admin login required'); res.end(JSON.stringify(await localQuery(p.query, true))); return; }
           else if (p.action === 'rpc') data = await rpc(p.name, p.args || {}, admin);
@@ -177,7 +184,4 @@ export function localRuntimePlugin() {
           const message = code === 'ER_SIGNAL_EXCEPTION' ? error.sqlMessage : code ? `MySQL operation failed (${code}). Check .env and the existing MySQL tables/procedures.` : error.message;
           res.statusCode = 400; res.end(JSON.stringify({ data: null, error: { message } }));
         }
-      });
-    },
-  };
 }
