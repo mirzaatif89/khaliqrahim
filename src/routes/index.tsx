@@ -14,11 +14,11 @@ import { CountUp } from "@/components/site/CountUp";
 import { Stars } from "@/components/site/Stars";
 import { WhatsAppIcon } from "@/components/site/icons";
 import { catalogQuery, contentQuery, reviewsQuery } from "@/lib/queries";
-import { whatsappLink } from "@/lib/content";
+import { mediaUrl, whatsappLink } from "@/lib/content";
+import { SITE_IMAGES } from "@/lib/site-images";
 import { CATEGORY_ICON, TONE_BG } from "@/lib/tones";
 import { cn } from "@/lib/utils";
 import heroImg from "@/assets/hero-remedies.jpg";
-import caseImg from "@/assets/case-taking.jpg";
 import herbsImg from "@/assets/herbs-mortar.jpg";
 import deliveryImg from "@/assets/home-delivery.jpg";
 import globulesImg from "@/assets/globules-macro.jpg";
@@ -247,7 +247,7 @@ function Home() {
         <div className="container-site grid items-center gap-14 lg:grid-cols-2">
           <Reveal from="left" className="relative">
             <div className="absolute -left-6 -top-6 size-40 rounded-full bg-tone-gold blur-2xl" />
-            <img src={caseImg} alt="Homeopathic doctor taking a detailed patient case" loading="lazy" className="relative aspect-[4/5] w-full rounded-[2.5rem] object-cover shadow-lift" />
+            <img src={c.doctor_photo_url ? mediaUrl(c.doctor_photo_url) : SITE_IMAGES.doctor} alt={c.doctor_name} loading="lazy" className="relative aspect-[4/5] w-full rounded-[2.5rem] object-cover object-[60%_center] shadow-lift" />
             <div className="absolute -bottom-8 right-4 grid grid-cols-2 gap-px overflow-hidden rounded-3xl bg-border shadow-lift sm:right-8">
               <div className="bg-card px-6 py-5 text-center">
                 <p className="font-display text-4xl text-primary"><CountUp to={c.experience_years} suffix="+" /></p>

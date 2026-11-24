@@ -1,7 +1,7 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { AnimatePresence, motion } from "motion/react";
-import { CalendarHeart, Menu, Phone, ShoppingBag, X } from "lucide-react";
+import { CalendarHeart, LogIn, Menu, Phone, ShoppingBag, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/lib/cart";
@@ -64,7 +64,7 @@ export function Header() {
                 key={n.to}
                 to={n.to}
                 activeOptions={{ exact: n.to === "/" }}
-                className="relative whitespace-nowrap rounded-full px-3 py-2 text-sm font-semibold text-foreground/75 transition-colors hover:text-primary data-[status=active]:text-primary"
+                className="relative whitespace-nowrap rounded-full px-2 py-2 text-sm font-semibold text-foreground/75 transition-colors hover:text-primary data-[status=active]:text-primary xl:px-3"
               >
                 {({ isActive }) => (
                   <>
@@ -76,11 +76,11 @@ export function Header() {
             ))}
           </nav>
           <div className="flex items-center gap-2">
-            <a href={`tel:${content.clinic.phone}`} className="hidden items-center gap-2 whitespace-nowrap text-sm 2xl:flex">
+            <a href={`tel:${content.clinic.phone}`} aria-label={`Call clinic: ${content.clinic.phone}`} className="hidden items-center gap-2 whitespace-nowrap text-sm 2xl:flex">
               <span className="grid size-9 place-items-center rounded-full bg-secondary text-primary">
                 <Phone className="size-4" />
               </span>
-              <span className="leading-tight">
+              <span className="hidden leading-tight">
                 <span className="block text-[0.65rem] uppercase tracking-widest text-muted-foreground">Call clinic</span>
                 <span className="font-bold">{content.clinic.phone}</span>
               </span>
@@ -105,6 +105,9 @@ export function Header() {
                 )}
               </AnimatePresence>
             </button>
+            <Button asChild variant="outlinePill" className="hidden h-11 px-4 lg:inline-flex">
+              <Link to="/admin"><LogIn /> Login</Link>
+            </Button>
             <Button asChild variant="hero" className="hidden h-11 px-5 sm:inline-flex lg:hidden xl:inline-flex">
               <Link to="/appointment">
                 <CalendarHeart /> Book appointment
@@ -141,6 +144,9 @@ export function Header() {
                     </Link>
                   </motion.div>
                 ))}
+                <Button asChild variant="outlinePill" size="xl" className="mt-3">
+                  <Link to="/admin"><LogIn /> Login</Link>
+                </Button>
                 <Button asChild variant="hero" size="xl" className="mt-3">
                   <Link to="/appointment">
                     <CalendarHeart /> Book appointment
