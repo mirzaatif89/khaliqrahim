@@ -12,6 +12,9 @@ import { localRuntimePlugin } from "./scripts/local-runtime.mjs";
 
 export default defineConfig({
   vite: {
+    // Builds and test runners can clear Vite's default cache while npm start is
+    // serving it. Keep local browser dependencies in their own cache directory.
+    ...(process.env['LOCAL_RUNTIME'] === "true" ? { cacheDir: "node_modules/.vite-local-runtime" } : {}),
     plugins: process.env['LOCAL_RUNTIME'] === "true" ? [localRuntimePlugin()] : [],
     define: { "import.meta.env.VITE_LOCAL_RUNTIME": JSON.stringify(process.env['LOCAL_RUNTIME'] === "true" ? "true" : "false") },
   },
