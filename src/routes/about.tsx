@@ -11,7 +11,7 @@ import { contentQuery } from "@/lib/queries";
 import { mediaUrl } from "@/lib/content";
 import clinicImg from "@/assets/clinic-room.jpg";
 
-import doctorAsset from "@/assets/dr-khaliq-rahim.jpg.asset.json";
+import { SITE_IMAGES } from "@/lib/site-images";
 export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
@@ -38,7 +38,7 @@ function About() {
 
       <section className="container-site grid items-center gap-14 py-20 md:py-28 lg:grid-cols-[1fr_1.2fr]">
         <Reveal from="left" className="relative mx-auto w-full max-w-md">
-          <img src={c.doctor_photo_url ? mediaUrl(c.doctor_photo_url) : doctorAsset.url} alt={c.doctor_name} className="aspect-[4/5] w-full rounded-t-[999px] rounded-b-[2.5rem] object-cover object-[60%_center] shadow-lift" />
+          <img src={c.doctor_photo_url ? mediaUrl(c.doctor_photo_url) : SITE_IMAGES.doctor} alt={c.doctor_name} className="aspect-[4/5] w-full rounded-t-[999px] rounded-b-[2.5rem] object-cover object-[60%_center] shadow-lift" />
           <div className="absolute -bottom-6 -right-4 rounded-3xl bg-gold-gradient px-6 py-5 text-accent-foreground shadow-glow">
             <p className="font-display text-5xl"><CountUp to={c.experience_years} suffix="+" /></p>
             <p className="text-xs font-bold uppercase tracking-wider">Years of practice</p>

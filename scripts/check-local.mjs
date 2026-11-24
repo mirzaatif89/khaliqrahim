@@ -39,7 +39,21 @@ try {
   const appointment = await call('rpc', { name: 'book_appointment', args: { ...common, p_age: null, p_gender: '', p_type: 'in_clinic', p_date: date.toISOString().slice(0, 10), p_time: '9:00 AM', p_complaint: 'Temporary test' } });
   assert.equal(appointment.error, null, JSON.stringify(appointment)); assert.equal(typeof appointment.data.fee, 'number');
   for (const name of ['admin_product_insights', 'admin_hot_leads']) assert.equal((await call('rpc', { name, args: { p_days: 30 } })).error, null);
-  for (const path of ['/', '/shop', '/auth', '/appointment']) { const response = await fetch(base + path); assert.equal(response.status, 200, path); }
+  const images = new Set();
+  for (const path of ['/', '/about', '/shop', `/shop/${p.slug}`, '/services', '/contact', '/reviews', '/auth', '/appointment']) {
+    const response = await fetch(base + path); assert.equal(response.status, 200, path);
+    const html = await response.text();
+    for (const match of html.matchAll(/<img[^>]*src="([^"]*)"/g)) images.add(match[1]);
+  }
+  for (const product of products.data) if (product.image_url?.startsWith('/')) images.add(product.image_url);
+  for (const src of images) {
+    assert(src, 'Image src must not be empty');
+    const response = await fetch(new URL(src, base));
+    assert.equal(response.status, 200, src);
+    assert(response.headers.get('content-type')?.startsWith('image/'), `Expected image content: ${src}`);
+    assert((await response.arrayBuffer()).byteLength > 0, `Empty image: ${src}`);
+  }
+  console.log(`PASS: ${images.size} unique image URLs across public pages and the full product catalog.`);
   await call('logout'); assert.equal((await call('session')).data, null);
   console.log('PASS: public pages, authentication, authorization, catalog, trusted prices, tracking privacy, invalid order, inquiry, review, event, appointment, insights, logout.');
 } finally {

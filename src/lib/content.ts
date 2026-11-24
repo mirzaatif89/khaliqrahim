@@ -1,3 +1,5 @@
+import { bundledImage } from "./site-images";
+
 export type ClinicContent = {
   name: string;
   doctor_name: string;
@@ -116,6 +118,8 @@ export function whatsappLink(number: string, text: string) {
 /** Turn a stored media path into a URL the browser can load. */
 export function mediaUrl(path: string | null | undefined): string {
   if (!path) return "";
+  const bundled = bundledImage(path);
+  if (bundled) return bundled;
   if (path.startsWith("http") || path.startsWith("/")) return path;
   return `/api/public/media/${path}`;
 }
