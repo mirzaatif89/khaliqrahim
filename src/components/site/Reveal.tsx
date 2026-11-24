@@ -1,5 +1,6 @@
 import { motion, type Variants } from "motion/react";
 import type { ReactNode } from "react";
+import { cn } from "@/lib/utils";
 
 const variants: Record<string, Variants> = {
   up: { hidden: { opacity: 0, y: 36 }, show: { opacity: 1, y: 0 } },
@@ -22,7 +23,7 @@ export function Reveal({
 }) {
   return (
     <motion.div
-      className={className}
+      className={cn("min-w-0", className)}
       initial="hidden"
       whileInView="show"
       viewport={{ once: true, margin: "-60px" }}
@@ -37,7 +38,7 @@ export function Reveal({
 export function Stagger({ children, className, gap = 0.08 }: { children: ReactNode; className?: string; gap?: number }) {
   return (
     <motion.div
-      className={className}
+      className={cn("min-w-0", className)}
       initial="hidden"
       whileInView="show"
       viewport={{ once: true, margin: "-60px" }}
@@ -51,7 +52,7 @@ export function Stagger({ children, className, gap = 0.08 }: { children: ReactNo
 export function StaggerItem({ children, className }: { children: ReactNode; className?: string }) {
   return (
     <motion.div
-      className={className}
+      className={cn("min-w-0", className)}
       variants={{ hidden: { opacity: 0, y: 30, scale: 0.97 }, show: { opacity: 1, y: 0, scale: 1 } }}
       transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
     >
