@@ -57,6 +57,7 @@ function ContentPage() {
           <Card>
             <div className="grid gap-4 sm:grid-cols-3">
               <ImageUpload label="Doctor photo" folder="site" value={clinic.doctor_photo_url} onChange={(v) => upd("clinic", { doctor_photo_url: v })} />
+              <ImageUpload label="Second doctor photo" folder="site" value={clinic.second_doctor.photo_url} onChange={(v) => upd("clinic", { second_doctor: { ...clinic.second_doctor, photo_url: v } })} />
               <ImageUpload label="Clinic logo" folder="site" value={clinic.logo_url} onChange={(v) => upd("clinic", { logo_url: v })} />
               <ImageUpload label="Certificate" folder="site" value={clinic.certificate_url} onChange={(v) => upd("clinic", { certificate_url: v })} />
             </div>
@@ -66,6 +67,11 @@ function ContentPage() {
               <Field label="Doctor title"><Input value={clinic.doctor_title} onChange={(e) => upd("clinic", { doctor_title: e.target.value })} /></Field>
               <Field label="Years of experience"><Input type="number" value={clinic.experience_years} onChange={(e) => upd("clinic", { experience_years: Number(e.target.value) })} /></Field>
               <Field label="Qualifications (one per line)" wide><Textarea value={clinic.qualifications.join("\n")} onChange={(e) => upd("clinic", { qualifications: e.target.value.split("\n") })} className="min-h-32" /></Field>
+              <div className="sm:col-span-2 mt-2 border-t border-border pt-6"><p className="font-display text-2xl">Second doctor</p><p className="mt-1 text-sm text-muted-foreground">This doctor appears on the public site and in the appointment form.</p></div>
+              <Field label="Second doctor name"><Input value={clinic.second_doctor.name} onChange={(e) => upd("clinic", { second_doctor: { ...clinic.second_doctor, name: e.target.value } })} /></Field>
+              <Field label="Second doctor title"><Input value={clinic.second_doctor.title} onChange={(e) => upd("clinic", { second_doctor: { ...clinic.second_doctor, title: e.target.value } })} /></Field>
+              <Field label="Second doctor qualifications (one per line)" wide><Textarea value={clinic.second_doctor.qualifications.join("\n")} onChange={(e) => upd("clinic", { second_doctor: { ...clinic.second_doctor, qualifications: e.target.value.split("\n") } })} /></Field>
+              <Field label="Second doctor introduction" wide><Textarea value={clinic.second_doctor.intro} onChange={(e) => upd("clinic", { second_doctor: { ...clinic.second_doctor, intro: e.target.value } })} /></Field>
               <Field label="Phone"><Input value={clinic.phone} onChange={(e) => upd("clinic", { phone: e.target.value })} /></Field>
               <Field label="WhatsApp (international, e.g. 923330501084)"><Input value={clinic.whatsapp} onChange={(e) => upd("clinic", { whatsapp: e.target.value })} /></Field>
               <Field label="Email"><Input value={clinic.email} onChange={(e) => upd("clinic", { email: e.target.value })} /></Field>

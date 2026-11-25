@@ -32,9 +32,9 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "Khaliq Rahim Medical Center — Homeopathic Doctor & Medicines, Islamabad" },
-      { name: "description", content: "Dr. Khaliq Rahim, homeopathic specialist with 30+ years of experience in Bhara Kahu, Islamabad. Book in-clinic or online consultations and reserve medicines online for clinic pickup." },
+      { name: "description", content: "Homeopathic consultations with Dr. Khaliq Rahim and Dr. Ghulam Shabber Awan in Islamabad. Book online and order medicines for delivery across Pakistan." },
       { property: "og:title", content: "Khaliq Rahim Medical Center — Gentle homeopathic healing" },
-      { property: "og:description", content: "Individualized homeopathic treatment, online consultation and medicines reserved online for clinic pickup." },
+      { property: "og:description", content: "Individualized homeopathic treatment, online consultation and medicine delivery across Pakistan." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -43,12 +43,12 @@ export const Route = createFileRoute("/")({
 });
 
 const services = [
-  { icon: Stethoscope, title: "In-clinic consultation", text: "Detailed case-taking and assessment with the doctor at our Bhara Kahu clinic." },
-  { icon: Video, title: "Online consultation", text: "Consult from anywhere in Pakistan or abroad by video or WhatsApp call." },
-  { icon: ClipboardList, title: "Online registration & tickets", text: "Register online and receive your appointment ticket number instantly." },
-  { icon: Truck, title: "Reserve & pick up", text: "Reserve medicines online and collect them from the clinic — pay at pickup." },
-  { icon: HeartPulse, title: "Follow-up care", text: "Regular follow-ups so your treatment is adjusted as you improve." },
-  { icon: MessageCircle, title: "WhatsApp support", text: "Quick answers and updates from our team on WhatsApp." },
+  { icon: Stethoscope, title: "In-clinic consultation", text: "Detailed case-taking and assessment with the doctor at our Bhara Kahu clinic.", href: "/appointment?type=in_clinic" },
+  { icon: Video, title: "Online consultation", text: "Consult from anywhere in Pakistan or abroad by video or WhatsApp call.", href: "/appointment?type=online" },
+  { icon: ClipboardList, title: "Online registration & tickets", text: "Register online and receive your appointment ticket number instantly.", href: "/appointment" },
+  { icon: Truck, title: "Home delivery", text: "Order medicines online for delivery across Pakistan, with Cash on Delivery.", href: "/shop" },
+  { icon: HeartPulse, title: "Follow-up care", text: "Regular follow-ups so your treatment is adjusted as you improve.", href: "/appointment?type=follow_up" },
+  { icon: MessageCircle, title: "WhatsApp support", text: "Quick answers and updates from our team on WhatsApp.", href: "/contact" },
 ];
 
 function Home() {
@@ -133,7 +133,7 @@ function Home() {
               className="mt-10 flex flex-wrap gap-x-7 gap-y-3 text-sm font-semibold text-foreground/80"
             >
               <li className="flex items-center gap-2"><BadgeCheck className="size-5 text-primary" /> {c.experience_years}+ years experience</li>
-              <li className="flex items-center gap-2"><Wallet className="size-5 text-primary" /> Pay at clinic</li>
+              <li className="flex items-center gap-2"><Wallet className="size-5 text-primary" /> Cash on Delivery</li>
               <li className="flex items-center gap-2"><ShieldCheck className="size-5 text-primary" /> UK & Pakistan qualified</li>
             </motion.ul>
           </div>
@@ -174,7 +174,7 @@ function Home() {
               className="absolute -right-2 top-1/3 animate-float rounded-2xl border border-border/70 bg-card/90 p-4 shadow-lift backdrop-blur sm:-right-8"
             >
               <p className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-primary"><Truck className="size-4" /> Order online</p>
-              <p className="mt-1 font-display text-lg">Pick up at clinic</p>
+              <p className="mt-1 font-display text-lg">Delivery across Pakistan</p>
             </motion.div>
             <motion.div
               initial={{ opacity: 0, y: 40 }}
@@ -196,7 +196,7 @@ function Home() {
       <section className="overflow-hidden border-y border-forest bg-forest py-5 text-forest-foreground">
         <div className="flex w-max animate-marquee items-center gap-10 font-display text-2xl italic md:text-3xl">
           {Array.from({ length: 2 }).flatMap((_, k) =>
-            ["Individualized treatment", "Mother tinctures", "Online consultation", "Biochemic tablets", "Clinic pickup", "Follow-up care", "Skin & hair", "Women's health"].map((t, i) => (
+            ["Individualized treatment", "Mother tinctures", "Online consultation", "Biochemic tablets", "Home delivery", "Follow-up care", "Skin & hair", "Women's health"].map((t, i) => (
               <span key={`${k}-${i}`} className="flex items-center gap-10 whitespace-nowrap">
                 {t} <Leaf className="size-5 text-accent" />
               </span>
@@ -209,7 +209,7 @@ function Home() {
       <section className="container-site py-20 md:py-28">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <SectionHeading eyebrow="Medicine store" title="Remedies for" accent="every need.">
-            Genuine homeopathic medicines, carefully dispensed by the clinic — reserve online and collect in person.
+            Genuine homeopathic medicines, carefully dispensed by the clinic and delivered across Pakistan.
           </SectionHeading>
           <Reveal from="right">
             <Button asChild variant="outlinePill" size="lg"><Link to="/shop">View all medicines <ArrowRight /></Link></Button>
@@ -274,6 +274,15 @@ function Home() {
                 </StaggerItem>
               ))}
             </Stagger>
+            <Reveal delay={0.16} className="mt-8 rounded-3xl border border-border bg-secondary/30 p-4 sm:flex sm:items-center sm:gap-5">
+              <img src={mediaUrl(c.second_doctor.photo_url || SITE_IMAGES.secondDoctor)} alt={c.second_doctor.name} loading="lazy" className="mx-auto aspect-square size-24 rounded-2xl object-cover sm:mx-0" />
+              <div className="mt-4 flex-1 sm:mt-0">
+                <p className="text-xs font-bold uppercase tracking-[0.18em] text-primary">Also available</p>
+                <h3 className="mt-1 text-xl">{c.second_doctor.name}</h3>
+                <p className="text-sm text-muted-foreground">{c.second_doctor.title} · {c.second_doctor.qualifications.join(" · ")}</p>
+              </div>
+              <Button asChild variant="outlinePill" className="mt-4 w-full sm:mt-0 sm:w-auto"><a href="/appointment?doctor=ghulam-shabber-awan">Book with Dr. Awan</a></Button>
+            </Reveal>
             <Reveal delay={0.2} className="mt-10 flex flex-wrap gap-3">
               <Button asChild variant="hero" size="lg"><Link to="/about">About the doctor <ArrowRight /></Link></Button>
               <Button asChild variant="whatsapp" size="lg">
@@ -314,13 +323,14 @@ function Home() {
           <Stagger className="grid gap-4 sm:grid-cols-2">
             {services.map((s) => (
               <StaggerItem key={s.title}>
-                <div className="group h-full rounded-3xl border border-forest-foreground/10 bg-forest-foreground/[0.04] p-6 transition-all duration-500 hover:-translate-y-1 hover:border-accent/50 hover:bg-forest-foreground/[0.08]">
+                <a href={s.href} className="group block h-full rounded-3xl border border-forest-foreground/10 bg-forest-foreground/[0.04] p-6 transition-all duration-500 hover:-translate-y-1 hover:border-accent/50 hover:bg-forest-foreground/[0.08] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent">
                   <span className="grid size-12 place-items-center rounded-2xl bg-accent/15 text-accent transition-transform duration-500 group-hover:scale-110 group-hover:rotate-6">
                     <s.icon className="size-6" />
                   </span>
                   <h3 className="mt-5 text-xl">{s.title}</h3>
                   <p className="mt-2 text-sm leading-relaxed text-forest-foreground/70">{s.text}</p>
-                </div>
+                  <span className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-accent">Open <ArrowRight className="size-4" /></span>
+                </a>
               </StaggerItem>
             ))}
             <StaggerItem className="sm:col-span-2">
@@ -333,13 +343,13 @@ function Home() {
       {/* HOW IT WORKS */}
       <section className="container-site grid items-center gap-14 py-20 md:py-28 lg:grid-cols-2">
         <div>
-          <SectionHeading eyebrow="Order in minutes" title="Reserve online," accent="collect at the clinic." />
+          <SectionHeading eyebrow="Order in minutes" title="Order online," accent="get delivery." />
           <div className="relative mt-10 space-y-8 before:absolute before:left-6 before:top-4 before:h-[calc(100%-2rem)] before:w-px before:bg-border">
             {[
               { n: "01", t: "Choose or consult", d: "Pick medicines from our store, or consult the doctor first for a personalised prescription." },
-              { n: "02", t: "Place your order", d: "Reserve in a minute — no card or online payment needed." },
+              { n: "02", t: "Place your order", d: "Add medicines, enter your delivery address and choose Cash on Delivery." },
               { n: "03", t: "We confirm on WhatsApp", d: `Our team confirms your order on ${c.phone} and dispatches it.` },
-              { n: "04", t: "Collect & pay at clinic", d: `${c.address} · ${c.hours}` },
+              { n: "04", t: "Receive & pay", d: "Receive your medicines at your address and pay on delivery." },
             ].map((s, i) => (
               <Reveal key={s.n} delay={i * 0.1} className="relative flex gap-6">
                 <span className="relative z-10 grid size-12 shrink-0 place-items-center rounded-full bg-primary font-display text-primary-foreground shadow-soft">{s.n}</span>
@@ -354,7 +364,7 @@ function Home() {
         <Reveal from="zoom" className="relative">
           <img src={deliveryImg} alt="A parcel of homeopathic medicines packed and ready" loading="lazy" className="aspect-square w-full rounded-[2.5rem] object-cover shadow-lift" />
           <div className="absolute left-6 top-6 rounded-full bg-card/90 px-5 py-2.5 text-sm font-bold text-primary shadow-soft backdrop-blur">
-            Ready for pickup
+            Delivery across Pakistan
           </div>
         </Reveal>
       </section>

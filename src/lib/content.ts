@@ -1,5 +1,13 @@
 import { bundledImage } from "./site-images";
 
+export type DoctorProfile = {
+  name: string;
+  title: string;
+  qualifications: string[];
+  photo_url: string;
+  intro: string;
+};
+
 export type ClinicContent = {
   name: string;
   doctor_name: string;
@@ -19,6 +27,7 @@ export type ClinicContent = {
   doctor_photo_url: string;
   logo_url: string;
   certificate_url: string;
+  second_doctor: DoctorProfile;
 };
 export type HomeContent = {
   announcement: string;
@@ -75,20 +84,27 @@ export const DEFAULT_CONTENT: SiteContent = {
     doctor_photo_url: "",
     logo_url: "",
     certificate_url: "",
+    second_doctor: {
+      name: "Dr. Ghulam Shabber Awan",
+      title: "Homeopathic Consultant",
+      qualifications: ["DHMS — Islamabad", "R.H.M.S — Islamabad"],
+      photo_url: "/images/site/Dr%20Ghulam%20Shabber%20Awan.jpeg",
+      intro: "Available for homeopathic consultations at Khaliq Rahim Medical Center.",
+    },
   },
   home: {
-    announcement: "Order medicines online · Pick up & pay at the clinic · WhatsApp 0333-0501084",
+    announcement: "Order medicines online · Home delivery across Pakistan · Cash on Delivery · WhatsApp 0333-0501084",
     hero_eyebrow: "Homeopathic Clinic & Medicine Store · Islamabad",
     hero_title: "Gentle healing,",
     hero_highlight: "for the whole you.",
     hero_subtitle:
-      "Individualized homeopathic treatment by Dr. Khaliq Rahim — 30+ years of experience. Consult in clinic or online, and reserve your medicines online for pickup at the clinic.",
+      "Individualized homeopathic treatment by our doctors. Consult in clinic or online, then order prescribed medicines with home delivery across Pakistan.",
   },
   about: { doctor_intro: "", mission: "", vision: "" },
   store: {
-    delivery_fee: 0,
-    free_delivery_over: 0,
-    delivery_time: "Ready for pickup at the clinic, usually the same day",
+    delivery_fee: 250,
+    free_delivery_over: 3000,
+    delivery_time: "2–4 working days across Pakistan",
     jazzcash_number: "",
     jazzcash_title: "",
     easypaisa_number: "",

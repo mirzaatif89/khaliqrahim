@@ -72,7 +72,7 @@ export function CartDrawer() {
               <div className="flex justify-between"><span>Subtotal</span><span className="font-semibold">{formatPKR(subtotal)}</span></div>
                             <div className="flex justify-between border-t border-border pt-3 text-lg"><span className="font-display">Total</span><span className="font-extrabold">{formatPKR(subtotal + fee)}</span></div>
               <Button asChild variant="hero" size="xl" className="mt-3 w-full" onClick={() => setOpen(false)}>
-                <Link to="/checkout">Reserve for clinic pickup</Link>
+                <Link to="/checkout">Checkout for delivery</Link>
               </Button>
               <Button asChild variant="link" className="w-full" onClick={() => setOpen(false)}>
                 <Link to="/cart">View full cart</Link>

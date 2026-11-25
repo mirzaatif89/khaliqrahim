@@ -26,7 +26,7 @@ export function Footer() {
         <div>
           <Logo inverted logoUrl={c.logo_url} />
           <p className="mt-6 max-w-sm text-sm leading-relaxed text-forest-foreground/70">
-            Individualized homeopathic care by {c.doctor_name} — {c.experience_years}+ years of trusted practice in Islamabad. Reserve medicines online and collect them from the clinic.
+            Individualized homeopathic care by {c.doctor_name} — {c.experience_years}+ years of trusted practice in Islamabad. Book online and order medicines for delivery across Pakistan.
           </p>
           <p className="font-urdu mt-4 text-lg text-accent" dir="rtl" lang="ur">قدرتی علاج، مکمل صحت</p>
           <div className="mt-6 flex gap-2">

@@ -65,6 +65,34 @@ function About() {
         </div>
       </section>
 
+      <section className="bg-card py-20 md:py-28">
+        <div className="container-site grid items-center gap-14 lg:grid-cols-[1.2fr_1fr]">
+          <div className="order-2 lg:order-1">
+            <SectionHeading eyebrow="Also available" title={c.second_doctor.name} accent="" />
+            <Reveal delay={0.1}>
+              <p className="mt-3 text-lg font-semibold text-primary">{c.second_doctor.title}</p>
+              <p className="mt-5 text-lg leading-relaxed text-muted-foreground">{c.second_doctor.intro}</p>
+            </Reveal>
+            <Stagger className="mt-8 space-y-3">
+              {c.second_doctor.qualifications.map((q) => (
+                <StaggerItem key={q}>
+                  <div className="flex items-center gap-4 rounded-2xl border border-border bg-background px-5 py-4 shadow-soft">
+                    <span className="grid size-10 shrink-0 place-items-center rounded-full bg-secondary text-primary"><GraduationCap className="size-5" /></span>
+                    <span className="font-semibold">{q}</span>
+                  </div>
+                </StaggerItem>
+              ))}
+            </Stagger>
+            <Reveal delay={0.2} className="mt-8">
+              <Button asChild variant="hero" size="lg"><a href="/appointment?doctor=ghulam-shabber-awan"><CalendarHeart /> Book with Dr. Awan</a></Button>
+            </Reveal>
+          </div>
+          <Reveal from="right" className="order-1 mx-auto w-full max-w-md lg:order-2">
+            <img src={mediaUrl(c.second_doctor.photo_url || SITE_IMAGES.secondDoctor)} alt={c.second_doctor.name} loading="lazy" className="aspect-[4/3] w-full rounded-[2.5rem] object-cover shadow-lift" />
+          </Reveal>
+        </div>
+      </section>
+
       <section className="bg-secondary/50 py-20 md:py-28">
         <div className="container-site grid gap-6 md:grid-cols-2">
           {[

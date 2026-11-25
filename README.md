@@ -20,7 +20,7 @@ and 14 products from the existing project. Existing content is preserved.
 The MySQL user needs table and routine creation privileges for this initial setup.
 Orders, appointments, inquiries, reviews, and tracking use a database procedure;
 prices, stock changes, and fees are computed in MySQL. The current storefront
-uses clinic pickup, with zero delivery fee by default.
+supports delivery across Pakistan, with a configurable delivery fee and free-delivery threshold.
 
 Leave `DB_HOST` blank for a preview with default content and an empty catalog.
 Saving forms requires MySQL. Local authentication uses an HttpOnly session cookie;

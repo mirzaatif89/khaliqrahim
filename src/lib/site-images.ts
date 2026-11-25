@@ -1,6 +1,7 @@
 // Original Lovable uploads bundled locally so images work without its asset proxy.
 export const SITE_IMAGES = {
   doctor: "/images/site/dr-khaliq-rahim.jpg",
+  secondDoctor: "/images/site/Dr%20Ghulam%20Shabber%20Awan.jpeg",
   logoLeaf: "/images/site/krmc-logo-leaf.png",
   logo: "/images/site/krmc-logo.jpg",
 } as const;

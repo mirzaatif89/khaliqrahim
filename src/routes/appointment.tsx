@@ -21,7 +21,19 @@ import { supabase } from "@/lib/backend";
 import { cn } from "@/lib/utils";
 import receptionImg from "@/assets/reception-desk.jpg";
 
+type AppointmentSearch = {
+  doctor?: "khaliq-rahim" | "ghulam-shabber-awan";
+  type?: "in_clinic" | "online" | "follow_up";
+};
+type DoctorId = NonNullable<AppointmentSearch["doctor"]>;
+
 export const Route = createFileRoute("/appointment")({
+  validateSearch: (search: Record<string, unknown>): AppointmentSearch => ({
+    doctor: search.doctor === "ghulam-shabber-awan" ? "ghulam-shabber-awan" : "khaliq-rahim",
+    type: ["in_clinic", "online", "follow_up"].includes(String(search.type))
+      ? String(search.type) as AppointmentSearch["type"]
+      : undefined,
+  }),
   head: () => ({
     meta: [
       { title: "Book an Appointment — Khaliq Rahim Medical Center" },
@@ -42,7 +54,9 @@ const TYPE_LABEL: Record<string, string> = { in_clinic: "In-clinic consultation"
 function Appointment() {
   const { data } = useSuspenseQuery(contentQuery);
   const c = data.clinic;
-  const [type, setType] = useState("in_clinic");
+  const search = Route.useSearch();
+  const [type, setType] = useState(search.type ?? "in_clinic");
+  const [doctor, setDoctor] = useState<DoctorId>(search.doctor ?? "khaliq-rahim");
   const [date, setDate] = useState<Date | undefined>();
   const [time, setTime] = useState("");
   const [form, setForm] = useState({ name: "", phone: "", email: "", age: "", gender: "", complaint: "" });
@@ -54,6 +68,11 @@ function Appointment() {
     { v: "online", icon: Video, label: "Online", fee: c.fees.online },
     { v: "follow_up", icon: RefreshCw, label: "Follow-up", fee: `Rs ${c.fees.follow_up.toLocaleString()}` },
   ];
+  const doctors: { id: DoctorId; name: string; title: string; qualifications: string[] }[] = [
+    { id: "khaliq-rahim", name: c.doctor_name, title: c.doctor_title, qualifications: c.qualifications },
+    { id: "ghulam-shabber-awan", name: c.second_doctor.name, title: c.second_doctor.title, qualifications: c.second_doctor.qualifications },
+  ];
+  const selectedDoctor = doctors.find((item) => item.id === doctor) ?? doctors[0];
 
   const submit = async (e: FormEvent) => {
     e.preventDefault();
@@ -63,7 +82,9 @@ function Appointment() {
     setBusy(true);
     const { data: res, error } = await supabase.rpc("book_appointment", {
       p_name: form.name, p_phone: form.phone, p_email: form.email, p_age: form.age ? Number(form.age) : (null as unknown as number),
-      p_gender: form.gender, p_type: type, p_date: format(date, "yyyy-MM-dd"), p_time: time, p_complaint: form.complaint, p_visitor: getVisitorId(),
+      p_gender: form.gender, p_type: type, p_date: format(date, "yyyy-MM-dd"), p_time: time,
+      p_complaint: `Requested doctor: ${selectedDoctor.name}${form.complaint.trim() ? `\n\n${form.complaint.trim()}` : ""}`,
+      p_visitor: getVisitorId(),
     });
     setBusy(false);
     if (error) { toast.error(error.message); return; }
@@ -107,6 +128,7 @@ function Appointment() {
                   <dl className="grid grid-cols-2 gap-6 text-sm">
                     <div><dt className="text-muted-foreground">Patient</dt><dd className="mt-1 text-lg font-semibold">{ticket.name}</dd></div>
                     <div><dt className="text-muted-foreground">Type</dt><dd className="mt-1 text-lg font-semibold">{TYPE_LABEL[ticket.type]}</dd></div>
+                    <div className="col-span-2"><dt className="text-muted-foreground">Requested doctor</dt><dd className="mt-1 text-lg font-semibold">{selectedDoctor.name}</dd></div>
                     <div><dt className="text-muted-foreground">Date</dt><dd className="mt-1 text-lg font-semibold">{format(new Date(ticket.date + "T00:00:00"), "EEE, d MMM yyyy")}</dd></div>
                     <div><dt className="text-muted-foreground">Preferred time</dt><dd className="mt-1 text-lg font-semibold">{ticket.time}</dd></div>
                     <div className="col-span-2"><dt className="text-muted-foreground">Fee</dt><dd className="mt-1 text-lg font-semibold">{ticket.fee ? `Rs ${ticket.fee.toLocaleString()}` : c.fees.online}</dd></div>
@@ -124,7 +146,26 @@ function Appointment() {
           ) : (
             <motion.form key="form" onSubmit={submit} initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="space-y-8 rounded-[2rem] border border-border/70 bg-card p-6 shadow-lift md:p-10">
               <div>
-                <Label className="text-base font-bold">1. Consultation type</Label>
+                <Label className="text-base font-bold">1. Choose your doctor</Label>
+                <div className="mt-3 grid gap-3 sm:grid-cols-2">
+                  {doctors.map((item) => (
+                    <button
+                      type="button"
+                      key={item.id}
+                      onClick={() => setDoctor(item.id)}
+                      className={cn("rounded-2xl border-2 p-4 text-left transition-all", doctor === item.id ? "border-primary bg-secondary shadow-soft" : "border-border hover:border-primary/40")}
+                      aria-pressed={doctor === item.id}
+                    >
+                      <p className="font-bold">{item.name}</p>
+                      <p className="mt-1 text-sm text-primary">{item.title}</p>
+                      <p className="mt-2 text-xs text-muted-foreground">{item.qualifications.join(" · ")}</p>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <Label className="text-base font-bold">2. Consultation type</Label>
                 <div className="mt-3 grid gap-3 sm:grid-cols-3">
                   {types.map((t) => (
                     <button
@@ -143,7 +184,7 @@ function Appointment() {
               </div>
 
               <div>
-                <Label className="text-base font-bold">2. Date & time</Label>
+                <Label className="text-base font-bold">3. Date & time</Label>
                 <div className="mt-3 grid gap-5 md:grid-cols-[auto_1fr]">
                   <div className="rounded-2xl border border-border p-2">
                     <Calendar
@@ -172,7 +213,7 @@ function Appointment() {
               </div>
 
               <div>
-                <Label className="text-base font-bold">3. Patient details</Label>
+                <Label className="text-base font-bold">4. Patient details</Label>
                 <div className="mt-3 grid gap-4 sm:grid-cols-2">
                   <div className="sm:col-span-2"><Input required placeholder="Patient full name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="h-12" /></div>
                   <Input required inputMode="tel" placeholder="Mobile / WhatsApp (03xx-xxxxxxx)" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} className="h-12" />

@@ -55,8 +55,8 @@ function OrderPlaced() {
           Thank you! <em className="italic text-gradient">Order placed.</em>
         </motion.h1>
         {order && <p className="mt-6 text-lg">Your order number is <span className="rounded-full bg-primary px-4 py-1.5 font-display text-2xl text-primary-foreground">{order}</span></p>}
-        {total != null && <p className="mt-4 text-muted-foreground">Total {formatPKR(total)} · {method === "cod" ? "Pay at the clinic when you collect" : "Payment will be verified by our team"}</p>}
-        <p className="mt-2 max-w-md text-muted-foreground">We'll call or WhatsApp you shortly to confirm. Pickup: {data.clinic.address} · {data.clinic.hours}.</p>
+        {total != null && <p className="mt-4 text-muted-foreground">Total {formatPKR(total)} · {method === "cod" ? "Pay cash when your order is delivered" : "Payment will be verified by our team"}</p>}
+        <p className="mt-2 max-w-md text-muted-foreground">We'll call or WhatsApp you shortly to confirm your delivery.</p>
         <div className="mt-10 flex flex-wrap justify-center gap-3">
           <Button asChild variant="whatsapp" size="xl">
             <a href={whatsappLink(data.clinic.whatsapp, `Assalam o Alaikum, I just placed order ${order ?? ""}.`)} target="_blank" rel="noreferrer"><WhatsAppIcon /> Message us</a>

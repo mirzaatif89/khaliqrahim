@@ -12,9 +12,9 @@ export const Route = createFileRoute("/cart")({
   head: () => ({
     meta: [
       { title: "Your Cart — Khaliq Rahim Medical Center" },
-      { name: "description", content: "Review the homeopathic medicines in your cart before checkout. Reserve for clinic pickup." },
+      { name: "description", content: "Review the homeopathic medicines in your cart before checkout for delivery." },
       { property: "og:title", content: "Your Cart — Khaliq Rahim Medical Center" },
-      { property: "og:description", content: "Review your medicines and reserve them for clinic pickup." },
+      { property: "og:description", content: "Review your medicines before delivery checkout." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex" },
@@ -64,7 +64,8 @@ function CartPage() {
           <aside className="h-fit space-y-3 rounded-[2rem] bg-card p-7 shadow-soft lg:sticky lg:top-28">
             <h2 className="text-2xl">Summary</h2>
             <div className="flex justify-between"><span>Subtotal</span><span className="font-semibold">{formatPKR(subtotal)}</span></div>
-            <p className="text-sm text-muted-foreground">Pick up and pay at the clinic.</p>
+            <div className="flex justify-between"><span>Delivery</span><span>{fee ? formatPKR(fee) : "Free"}</span></div>
+            <p className="text-sm text-muted-foreground">Delivery across Pakistan with Cash on Delivery.</p>
             {data.store.free_delivery_over > 0 && fee > 0 && (
               <p className="text-sm text-muted-foreground">Free delivery on orders over {formatPKR(data.store.free_delivery_over)}.</p>
             )}

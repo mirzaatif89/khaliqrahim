@@ -25,9 +25,9 @@ export const Route = createFileRoute("/shop/")({
   head: () => ({
     meta: [
       { title: "Homeopathic Medicines Online — Khaliq Rahim Medical Center" },
-      { name: "description", content: "Buy genuine homeopathic medicines online: mother tinctures, dilutions, biochemic tablets, syrups, tonics, skin & hair care. Reserve online and pick up at the clinic in Bhara Kahu." },
+      { name: "description", content: "Buy genuine homeopathic medicines online: mother tinctures, dilutions, biochemic tablets, syrups, tonics, skin and hair care, delivered across Pakistan." },
       { property: "og:title", content: "Homeopathic Medicine Store — Khaliq Rahim Medical Center" },
-      { property: "og:description", content: "Mother tinctures, dilutions, biochemic tablets, tonics and treatment kits — reserve online, collect at the clinic." },
+      { property: "og:description", content: "Mother tinctures, dilutions, biochemic tablets, tonics and treatment kits — order online for delivery." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -65,8 +65,8 @@ function Shop() {
       <PageHero eyebrow="Medicine store" title="Genuine remedies," accent="reserved online." image={shelvesImg} alt="Shelves of homeopathic medicine bottles in the clinic dispensary">
         Browse medicines dispensed by {content.clinic.name}. Not sure what you need? Consult the doctor first — we'll guide you.
         <div className="mt-6 flex flex-wrap gap-3 text-sm font-semibold">
-          <span className="inline-flex items-center gap-2 rounded-full bg-forest-foreground/10 px-4 py-2"><Wallet className="size-4 text-accent" /> Pay at clinic</span>
-          <span className="inline-flex items-center gap-2 rounded-full bg-forest-foreground/10 px-4 py-2"><Truck className="size-4 text-accent" /> Pickup at clinic</span>
+          <span className="inline-flex items-center gap-2 rounded-full bg-forest-foreground/10 px-4 py-2"><Wallet className="size-4 text-accent" /> Cash on Delivery</span>
+          <span className="inline-flex items-center gap-2 rounded-full bg-forest-foreground/10 px-4 py-2"><Truck className="size-4 text-accent" /> Delivery across Pakistan</span>
         </div>
       </PageHero>
 

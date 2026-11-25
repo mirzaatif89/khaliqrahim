@@ -127,8 +127,8 @@ function ProductPage() {
                 </a>
               </Button>
               <div className="mt-8 grid grid-cols-3 gap-3 text-center text-xs font-semibold">
-                <div className="rounded-2xl bg-card p-4 shadow-soft"><Wallet className="mx-auto mb-2 size-5 text-primary" />Pay at clinic</div>
-                <div className="rounded-2xl bg-card p-4 shadow-soft"><Truck className="mx-auto mb-2 size-5 text-primary" />Clinic pickup</div>
+                <div className="rounded-2xl bg-card p-4 shadow-soft"><Wallet className="mx-auto mb-2 size-5 text-primary" />Cash on Delivery</div>
+                <div className="rounded-2xl bg-card p-4 shadow-soft"><Truck className="mx-auto mb-2 size-5 text-primary" />Pakistan delivery</div>
                 <div className="rounded-2xl bg-card p-4 shadow-soft"><ShieldCheck className="mx-auto mb-2 size-5 text-primary" />Dispensed by clinic</div>
               </div>
             </motion.div>

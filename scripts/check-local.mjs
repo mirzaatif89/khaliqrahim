@@ -19,7 +19,7 @@ try {
   const products = await call('query', { query: { table: 'products', operation: 'select' } });
   assert(products.data.length > 0);
   const p = products.data.find(p => p.stock > 0);
-  const args = { ...common, p_address: 'Clinic pickup test', p_city: 'Clinic pickup', p_notes: 'Temporary verification', p_payment_method: 'cod', p_payment_reference: '', p_items: [{ product_id: p.id, quantity: 1, price: 1 }] };
+  const args = { ...common, p_address: 'Test House, Test Street', p_city: 'Islamabad', p_notes: 'Temporary verification', p_payment_method: 'cod', p_payment_reference: '', p_items: [{ product_id: p.id, quantity: 1, price: 1 }] };
   const order = await call('rpc', { name: 'place_order', args });
   assert.equal(order.error, null, JSON.stringify(order));
   const [settings] = await db.query("SELECT value FROM site_content WHERE `key`='store'");

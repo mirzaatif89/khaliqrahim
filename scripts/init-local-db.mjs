@@ -33,11 +33,20 @@ export async function initializeDatabase() {
   // Seed only missing rows; existing local edits are preserved on restart.
   for (const m of source.matchAll(/\('(clinic|home|about|store)', '([\s\S]*?)'::jsonb\)/g)) {
     const value = JSON.parse(m[2].replace(/''/g, "'"));
-    if (m[1] === 'store') Object.assign(value, { delivery_fee: 0, free_delivery_over: 0, delivery_time: 'Ready for pickup at the clinic, usually the same day' });
-    if (m[1] === 'home') value.announcement = 'Order medicines online · Pick up & pay at the clinic · WhatsApp 0333-0501084';
+    if (m[1] === 'store') Object.assign(value, { delivery_fee: 250, free_delivery_over: 3000, delivery_time: '2–4 working days across Pakistan' });
+    if (m[1] === 'home') value.announcement = 'Order medicines online · Home delivery across Pakistan · Cash on Delivery · WhatsApp 0333-0501084';
     if (m[1] === 'about') value.mission = 'To make safe, gentle and individualized homeopathic care easy to reach — in our clinic and online.';
     await db.execute('INSERT IGNORE INTO site_content (`key`, value) VALUES (?, ?)', [m[1], JSON.stringify(value)]);
   }
+  // Upgrade only the previous pickup-only defaults; changes made by clinic staff remain untouched.
+  await db.execute(`UPDATE site_content SET value = JSON_SET(value,
+    '$.delivery_fee', 250,
+    '$.free_delivery_over', 3000,
+    '$.delivery_time', '2–4 working days across Pakistan'
+  ) WHERE \`key\` = 'store' AND JSON_UNQUOTE(JSON_EXTRACT(value, '$.delivery_time')) = 'Ready for pickup at the clinic, usually the same day'`);
+  await db.execute(`UPDATE site_content SET value = JSON_SET(value,
+    '$.announcement', 'Order medicines online · Home delivery across Pakistan · Cash on Delivery · WhatsApp 0333-0501084'
+  ) WHERE \`key\` = 'home' AND JSON_UNQUOTE(JSON_EXTRACT(value, '$.announcement')) = 'Order medicines online · Pick up & pay at the clinic · WhatsApp 0333-0501084'`);
   const categories = source.split('-- SEED: CATEGORIES')[1].split('-- SEED: PRODUCTS')[0];
   for (const row of tuples(categories.slice(categories.indexOf('values') + 6))) {
     await db.execute('INSERT IGNORE INTO categories (name, slug, description, tone, icon, sort_order) VALUES (?,?,?,?,?,?)', row);

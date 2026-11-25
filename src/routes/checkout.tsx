@@ -19,9 +19,9 @@ export const Route = createFileRoute("/checkout")({
   head: () => ({
     meta: [
       { title: "Checkout — Khaliq Rahim Medical Center" },
-      { name: "description", content: "Complete your order of homeopathic medicines. Reserve for pickup and pay at the clinic." },
+      { name: "description", content: "Complete your order of homeopathic medicines for delivery across Pakistan with Cash on Delivery." },
       { property: "og:title", content: "Checkout — Khaliq Rahim Medical Center" },
-      { property: "og:description", content: "Reserve medicines for clinic pickup." },
+      { property: "og:description", content: "Order medicines online for delivery across Pakistan." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex" },
@@ -40,10 +40,10 @@ function Checkout() {
   const [method, setMethod] = useState("cod");
   const [ref, setRef] = useState("");
   const [busy, setBusy] = useState(false);
-  const [form, setForm] = useState({ name: "", phone: "", email: "", notes: "" });
+  const [form, setForm] = useState({ name: "", phone: "", email: "", address: "", city: "", notes: "" });
 
   const methods = [
-    { v: "cod", icon: Banknote, label: "Pay at the clinic", info: "Pay in cash when you collect your medicines.", show: true },
+    { v: "cod", icon: Banknote, label: "Cash on Delivery", info: "Pay cash when your medicines are delivered.", show: true },
     { v: "jazzcash", icon: Smartphone, label: "JazzCash", info: `Send ${formatPKR(subtotal + fee)} to ${s.jazzcash_number} (${s.jazzcash_title}) and enter the transaction ID.`, show: !!s.jazzcash_number },
     { v: "easypaisa", icon: Wallet, label: "Easypaisa", info: `Send ${formatPKR(subtotal + fee)} to ${s.easypaisa_number} (${s.easypaisa_title}) and enter the transaction ID.`, show: !!s.easypaisa_number },
     { v: "bank", icon: Landmark, label: "Bank transfer", info: `${s.bank_name} · ${s.bank_account_title} · A/C ${s.bank_account_number}${s.bank_iban ? ` · IBAN ${s.bank_iban}` : ""}`, show: !!s.bank_account_number },
@@ -52,10 +52,11 @@ function Checkout() {
   const submit = async (e: FormEvent) => {
     e.preventDefault();
     if (!isValidPkMobile(form.phone)) { toast.error("Please enter a valid mobile number, e.g. 0333-0501084"); return; }
+    if (form.address.trim().length < 8 || form.city.trim().length < 2) { toast.error("Please enter your complete delivery address and city"); return; }
     if (method !== "cod" && ref.trim().length < 4) { toast.error("Please enter your payment transaction ID"); return; }
     setBusy(true);
     const { data: res, error } = await supabase.rpc("place_order", {
-      p_name: form.name, p_phone: form.phone, p_email: form.email, p_address: `Clinic pickup — ${data.clinic.address}`, p_city: "Clinic pickup", p_notes: form.notes,
+      p_name: form.name, p_phone: form.phone, p_email: form.email, p_address: form.address.trim(), p_city: form.city.trim(), p_notes: form.notes,
       p_payment_method: method, p_payment_reference: method === "cod" ? "" : ref,
       p_items: lines.map((l) => ({ product_id: l.product_id, quantity: l.quantity })), p_visitor: getVisitorId(),
     });
@@ -83,11 +84,13 @@ function Checkout() {
         <div className="space-y-8">
           <div className="rounded-[2rem] border border-border bg-card p-6 shadow-soft md:p-8">
             <h2 className="text-2xl">Your details</h2>
-            <p className="mt-1 text-sm text-muted-foreground">Pickup at {data.clinic.address} · {data.clinic.hours}</p>
+            <p className="mt-1 text-sm text-muted-foreground">Delivering across Pakistan · {s.delivery_time}</p>
             <div className="mt-5 grid gap-4 sm:grid-cols-2">
               <div className="sm:col-span-2"><Label htmlFor="n">Full name</Label><Input id="n" required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="mt-1.5 h-12" /></div>
               <div><Label htmlFor="p">Mobile / WhatsApp</Label><Input id="p" required inputMode="tel" placeholder="03xx-xxxxxxx" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} className="mt-1.5 h-12" /></div>
               <div><Label htmlFor="e">Email (optional)</Label><Input id="e" type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} className="mt-1.5 h-12" /></div>
+              <div className="sm:col-span-2"><Label htmlFor="a">Complete delivery address</Label><Textarea id="a" required placeholder="House / street / area" value={form.address} onChange={(e) => setForm({ ...form, address: e.target.value })} className="mt-1.5 min-h-24" /></div>
+              <div><Label htmlFor="c">City</Label><Input id="c" required placeholder="e.g. Islamabad" value={form.city} onChange={(e) => setForm({ ...form, city: e.target.value })} className="mt-1.5 h-12" /></div>
               <div><Label htmlFor="o">Order notes (optional)</Label><Input id="o" value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} className="mt-1.5 h-12" /></div>
             </div>
           </div>
@@ -120,13 +123,13 @@ function Checkout() {
           </ul>
           <div className="space-y-2 border-t border-border pt-4 text-sm">
             <div className="flex justify-between"><span>Subtotal</span><span>{formatPKR(subtotal)}</span></div>
-            
+            <div className="flex justify-between"><span>Delivery</span><span>{fee ? formatPKR(fee) : "Free"}</span></div>
             <div className="flex justify-between pt-2 text-xl"><span className="font-display">Total</span><span className="font-extrabold">{formatPKR(subtotal + fee)}</span></div>
           </div>
           <Button type="submit" variant="hero" size="xl" className="w-full" disabled={busy || lines.length === 0}>
-            <Lock /> {busy ? "Reserving…" : "Reserve for pickup"}
+            <Lock /> {busy ? "Placing order…" : "Place order for delivery"}
           </Button>
-          <p className="text-center text-xs text-muted-foreground">Our team will WhatsApp you when your medicines are ready.</p>
+          <p className="text-center text-xs text-muted-foreground">Our team will confirm your delivery on WhatsApp.</p>
         </aside>
       </form>
     </section>

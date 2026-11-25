@@ -20,7 +20,7 @@ export const Route = createFileRoute("/services")({
       { title: "Services & Fees — Khaliq Rahim Medical Center" },
       { name: "description", content: "In-clinic and online homeopathic consultation, patient registration, individualized treatment, medicine dispensing, online medicine reservation and follow-up care. Consultation Rs 1000, follow-up Rs 500." },
       { property: "og:title", content: "Homeopathic Services & Fees — Khaliq Rahim Medical Center" },
-      { property: "og:description", content: "Consultation Rs 1000 · Follow-up Rs 500 · Online consultation · Reserve medicines for clinic pickup." },
+      { property: "og:description", content: "Consultation Rs 1000 · Follow-up Rs 500 · Online consultation · Medicine delivery across Pakistan." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -35,9 +35,9 @@ const SERVICES = [
   { icon: Video, t: "Online Homeopathic Consultation", d: "Video or WhatsApp consultation for patients anywhere in Pakistan or abroad." },
   { icon: Ticket, t: "Online Registration & Tickets", d: "Register online and receive your ticket number instantly." },
   { icon: FileHeart, t: "Individualized Treatment", d: "Remedies selected for you as a person — not a one-size-fits-all formula." },
-  { icon: Pill, t: "Medicine Dispensing", d: "Genuine medicines dispensed directly by the clinic." },
-  { icon: Home, t: "Online Medicine Reservation", d: "Reserve your medicines online and collect them ready-packed at the clinic." },
-  { icon: Wallet, t: "Pay at the Clinic", d: "Pay in cash when you collect — no card needed." },
+  { icon: Pill, t: "Medicine Dispensing", d: "Genuine medicines prepared and dispatched by the clinic." },
+  { icon: Home, t: "Online Ordering & Delivery", d: "Order medicines online for delivery across Pakistan." },
+  { icon: Wallet, t: "Cash on Delivery", d: "Pay in cash when your medicines arrive — no card needed." },
   { icon: HeartPulse, t: "Follow-Up Consultation", d: "Regular reviews so treatment is adjusted as you improve." },
   { icon: MessageCircle, t: "WhatsApp Patient Support", d: "Quick help and updates from our team on WhatsApp." },
   { icon: ClipboardList, t: "Patient Record Management", d: "Your history is kept on record for continuous, informed care." },
@@ -100,15 +100,15 @@ function Services() {
         </Reveal>
         <div>
           <SectionHeading eyebrow="Online consultation" title="See the doctor" accent="from home.">
-            Can't visit the clinic? Book an online consultation. The doctor reviews your case by video or WhatsApp call, and your medicines are kept ready for pickup at the clinic.
+            Can't visit the clinic? Book an online consultation. The doctor reviews your case by video or WhatsApp call, then your medicines can be ordered online for delivery.
           </SectionHeading>
           <Reveal delay={0.1} className="mt-8 flex flex-wrap gap-3">
-            <Button asChild variant="hero" size="xl"><Link to="/appointment">Book online consultation <ArrowRight /></Link></Button>
+            <Button asChild variant="hero" size="xl"><a href="/appointment?type=online">Book online consultation <ArrowRight /></a></Button>
             <Button asChild variant="whatsapp" size="xl">
               <a href={whatsappLink(c.whatsapp, "Assalam o Alaikum, I would like an online consultation.")} target="_blank" rel="noreferrer"><WhatsAppIcon /> WhatsApp</a>
             </Button>
           </Reveal>
-          <Reveal delay={0.2} className="mt-6 flex items-center gap-2 text-sm text-muted-foreground"><Package className="size-4 text-primary" /> Medicines prepared for pickup after your consultation.</Reveal>
+          <Reveal delay={0.2} className="mt-6 flex items-center gap-2 text-sm text-muted-foreground"><Package className="size-4 text-primary" /> Medicines can be delivered after your consultation.</Reveal>
         </div>
       </section>
     </>

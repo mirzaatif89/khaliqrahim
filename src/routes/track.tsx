@@ -33,7 +33,7 @@ export const Route = createFileRoute("/track")({
 });
 
 const STEPS = ["pending", "confirmed", "processing", "shipped", "delivered"];
-const LABEL: Record<string, string> = { pending: "Received", confirmed: "Confirmed", processing: "Packing", shipped: "Ready for pickup", delivered: "Collected", cancelled: "Cancelled" };
+const LABEL: Record<string, string> = { pending: "Received", confirmed: "Confirmed", processing: "Packing", shipped: "Out for delivery", delivered: "Delivered", cancelled: "Cancelled" };
 
 function Track() {
   const search = Route.useSearch();
@@ -88,7 +88,7 @@ function Track() {
               {res.items.map((it, i) => (
                 <li key={i} className="flex justify-between"><span>{it.name} × {it.quantity}</span><span>{formatPKR(it.line_total)}</span></li>
               ))}
-              <li className="hidden"><span>Delivery</span><span>{res.delivery_fee ? formatPKR(res.delivery_fee) : "Free"}</span></li>
+              <li className="flex justify-between"><span>Delivery</span><span>{res.delivery_fee ? formatPKR(res.delivery_fee) : "Free"}</span></li>
               <li className="flex justify-between pt-2 text-lg font-bold"><span>Total</span><span>{formatPKR(res.total)}</span></li>
               <li className="text-muted-foreground">Payment: {res.payment_method.toUpperCase()} · {res.payment_status}</li>
             </ul>
