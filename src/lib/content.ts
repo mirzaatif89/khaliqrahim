@@ -87,7 +87,7 @@ export const DEFAULT_CONTENT: SiteContent = {
     second_doctor: {
       name: "Dr. Ghulam Shabber Awan",
       title: "Homeopathic Consultant",
-      qualifications: ["DHMS — Islamabad", "R.H.M.S — Islamabad"],
+      qualifications: ["DHMS (RWP)", "RHMP"],
       photo_url: "/images/site/Dr%20Ghulam%20Shabber%20Awan.jpeg",
       intro: "Available for homeopathic consultations at Khaliq Rahim Medical Center.",
     },
